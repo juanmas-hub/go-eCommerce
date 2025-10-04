@@ -1,14 +1,12 @@
 package models
 
 import (
-	"time"
+	"gorm.io/gorm"
 )
 
 type Cart struct {
-	ID        uint      `gorm:"primaryKey"`
+	gorm.Model
 	UserID    uint      `gorm:"uniqueIndex"` // un carrito por usuario
-	CreatedAt time.Time
-	UpdatedAt time.Time
 
 	Items []CartItem `gorm:"foreignKey:CartID"`
 }

@@ -1,15 +1,13 @@
 package models
 
 import (
-	"time"
+	"gorm.io/gorm"
 )
 
 type Category struct {
-	ID          uint      `gorm:"primaryKey"`
+	gorm.Model
 	Name        string    `gorm:"size:100;unique;not null"`
 	Description string    `gorm:"type:text"`
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
 
 	Products []Product `gorm:"foreignKey:CategoryID"`
 }

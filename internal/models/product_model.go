@@ -1,17 +1,14 @@
 package models
 import (
-	"time"
+	"gorm.io/gorm"
 )
 
 type Product struct {
-	ID          uint      `gorm:"primaryKey"`
+	gorm.Model
 	Name        string    `gorm:"size:100;not null"`
-	Description string    `gorm:"type:text"`
 	Price       float64   `gorm:"not null"`
 	Stock       int       `gorm:"not null"`
 	ImageURL    string    `gorm:"size:255"`
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
 
 	CartItems  []CartItem  `gorm:"foreignKey:ProductID"`
 	OrderItems []OrderItem `gorm:"foreignKey:ProductID"`
