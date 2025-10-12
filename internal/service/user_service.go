@@ -6,13 +6,13 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func SignUp(username string, email string, password string) int {
+func SignUp(username string, email string, password string, role string) int {
 	var hash string
 	if HashPassword(&hash, password) != 0 {
 		return 1
 	}
 
-	var user models.User = models.User{Username: username, Email: email, Password: string(hash)}
+	var user models.User = models.User{Username: username, Email: email, Password: string(hash), Role: role}
 	if database.CreateUser(&user) != 0 {
 		return 1
 	}
@@ -37,5 +37,15 @@ func LogIn(c *gin.Context, email string, password string) int{
 	
 	SetCookie(c, tokenString)
 
+	return 0
+}
+
+func CheckRole(userID uint, role string) int {
+	var userRole string = database.GetRole(userID)
+
+	if userRole != role{
+		//loguearlo
+		return 1
+	}
 	return 0
 }

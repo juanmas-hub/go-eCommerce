@@ -24,3 +24,15 @@ func CheckExistencebyEmail(user *models.User, email string) int {
 	}
 	return 0
 }
+
+func GetRole(id uint) string {
+	var user models.User
+
+	result := initializers.DB.First(&user, id)
+	if result.Error != nil {
+		// loguear
+		return ""
+	}
+
+	return user.Role
+}

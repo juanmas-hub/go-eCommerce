@@ -11,13 +11,14 @@ func SignUp(c *gin.Context) {
 		Username string
 		Email 	 string
 		Password string
+		Role 	 string
 	}
 
 	if Bind(c, &body) != 0 {
 		return
 	}
 	
-	if service.SignUp(body.Username, body.Email, body.Password) != 0{
+	if service.SignUp(body.Username, body.Email, body.Password, body.Role) != 0{
 		c.JSON(http.StatusInternalServerError, gin.H{
 			"error": "failed to SignUp",
 		})
