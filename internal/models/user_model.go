@@ -10,5 +10,5 @@ type User struct {
     Role     string `gorm:"size:20;default:customer"`
 
     Orders   []Order `gorm:"foreignKey:UserID"`
-	Cart     Cart    `gorm:"foreignKey:UserID"`
+	Cart     *Cart    `gorm:"foreignKey:UserID"`
 }

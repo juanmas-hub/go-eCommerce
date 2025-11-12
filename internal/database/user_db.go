@@ -5,14 +5,30 @@ import (
 	"go-eCommerce/internal/models"
 
 )
-func CreateUser[T any](user *T) int {
+func CreateUser(user *models.User) error {
+    tx := initializers.DB.Begin()
+    if tx.Error != nil {
+        return tx.Error
+    }
 
-	result := initializers.DB.Create(user)
+    if result := tx.Omit("Cart").Create(user); result.Error != nil {
+        tx.Rollback() 
+        return result.Error
+    }
 
-	if result.Error != nil{
-		return 1
-	}
-	return 0
+    if user.Cart != nil {
+        user.Cart.UserID = user.ID
+
+		user.Cart.ID = 0
+
+        if result := tx.Create(user.Cart); result.Error != nil {
+            tx.Rollback()
+            return result.Error
+        }
+    }
+
+    tx.Commit()
+    return nil
 }
 
 func CheckExistencebyEmail(user *models.User, email string) int {
@@ -35,4 +51,16 @@ func GetRole(id uint) string {
 	}
 
 	return user.Role
+}
+
+func GetCartID(id uint) (uint, error) {
+	var user models.User
+
+	result := initializers.DB.First(&user, id)
+	if result.Error != nil {
+		// loguear
+		return 0,result.Error
+	}
+
+	return user.Cart.ID, nil
 }

@@ -10,15 +10,15 @@ import(
 	"time"
 )
 
-func HashPassword(hash *string, password string) int {
+func HashPassword(hash *string, password string) error {
 	h, err := bcrypt.GenerateFromPassword([]byte(password), 10) // default cost
 
 	if err != nil{
 		// log error
-		return 1
+		return err
 	}
 	*hash = string(h)
-	return 0
+	return nil
 }
 
 
