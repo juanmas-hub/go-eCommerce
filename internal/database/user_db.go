@@ -3,10 +3,10 @@ package database
 import (
 	"go-eCommerce/initializers"
 	"go-eCommerce/internal/models"
-
+	"errors"
 )
 func CreateUser(user *models.User) error {
-    tx := initializers.DB.Begin()
+    /*tx := initializers.DB.Begin()
     if tx.Error != nil {
         return tx.Error
     }
@@ -28,6 +28,16 @@ func CreateUser(user *models.User) error {
     }
 
     tx.Commit()
+    return nil*/
+	result := initializers.DB.Create(user)
+	if result.Error != nil{
+		return errors.New("error al crear el usuario: " + result.Error.Error())
+	}
+
+	if user.Cart.ID == 0 {
+        return errors.New("el carrito no se creó correctamente, revise la configuración de la relación")
+    }
+
     return nil
 }
 
